@@ -137,3 +137,14 @@ class Ball:
 
     def __str__(self):
         return str(self.x) + ":" + str(self.y) + ":" + str(self.vx) + ":" + str(self.vy) + ":" + str(self.count) + str(self.id)
+
+
+class Good_ball(Ball):
+    def __init__(self, size, x, y, vx, vy, color, id):
+        super().__init__(size, x, y, vx, vy, color, id)
+        self.score = 2
+
+class Bad_ball(Ball):
+    def __init__(self, size, x, y, vx, vy, color, id):
+        super().__init__(size, x, y, vx, vy, color, id) 
+        self.score = -1
