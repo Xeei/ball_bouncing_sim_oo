@@ -48,8 +48,7 @@ class BouncingSimulator:
 
         jerry = turtle.Turtle()
         self.bg_score = Backgroud_Score(jerry, self.score)
-        self.bg_score.set_location([0, 0])
-        self.bg_score.draw()
+        self.bg_score.set_location([0, 50])
         self.screen = turtle.Screen()
 
     # updates priority queue with all new events for a_ball
@@ -128,7 +127,6 @@ class BouncingSimulator:
         self.screen.onkey(self.move_right, "Right")
         # self.screen.onkey(self.move_up, "Up")
         # self.screen.onkey(self.move_down, "Down")
-        
         while (True):
             e = heapq.heappop(self.pq)
             if not e.is_valid():
@@ -156,11 +154,14 @@ class BouncingSimulator:
                 if isinstance(ball_a, ball.Good_ball):
                     self.score += 1
                     self.bg_score.update_score(self.score)
+                    if self.score == 10:
+                        break
                     print('Good ball Hit paddle at', datetime.datetime.now())
                 elif isinstance(ball_a, ball.Bad_ball):
-                    self.score -= 1
-                    self.bg_score.update_score(self.score)
-                    print('Bad ball Hit paddle at', datetime.datetime.now())
+                    if self.score - 1 >= 0:
+                        self.score -= 1
+                        self.bg_score.update_score(self.score)
+                        print('Bad ball Hit paddle at', datetime.datetime.now())
                 print(self.score)
 
             self.__predict(ball_a)
