@@ -4,7 +4,8 @@ import turtle
 import random
 import heapq
 import paddle
-
+from bg_score import Backgroud_Score
+import datetime
 class BouncingSimulator:
     def __init__(self, num_balls):
         self.num_balls = num_balls
@@ -18,6 +19,7 @@ class BouncingSimulator:
         turtle.colormode(255)
         self.canvas_width = turtle.screensize()[0]
         self.canvas_height = turtle.screensize()[1]
+        self.score = 0
         print(self.canvas_width, self.canvas_height)
 
         ball_radius = 0.05 * self.canvas_width
@@ -44,6 +46,10 @@ class BouncingSimulator:
         self.my_paddle = paddle.Paddle(200, 50, (255, 0, 0), tom)
         self.my_paddle.set_location([0, -50])
 
+        jerry = turtle.Turtle()
+        self.bg_score = Backgroud_Score(jerry, self.score)
+        self.bg_score.set_location([0, 0])
+        self.bg_score.draw()
         self.screen = turtle.Screen()
 
     # updates priority queue with all new events for a_ball
@@ -86,6 +92,7 @@ class BouncingSimulator:
         heapq.heappush(self.pq, my_event.Event(self.t + 1.0/self.HZ, None, None, None))
 
     def __paddle_predict(self):
+
         for i in range(len(self.ball_list)):
             a_ball = self.ball_list[i]
             dtP = a_ball.time_to_hit_paddle(self.my_paddle)
@@ -146,6 +153,15 @@ class BouncingSimulator:
                 self.__redraw()
             elif (ball_a is not None) and (ball_b is None) and (paddle_a is not None):
                 ball_a.bounce_off_paddle()
+                if isinstance(ball_a, ball.Good_ball):
+                    self.score += 1
+                    self.bg_score.update_score(self.score)
+                    print('Good ball Hit paddle at', datetime.datetime.now())
+                elif isinstance(ball_a, ball.Bad_ball):
+                    self.score -= 1
+                    self.bg_score.update_score(self.score)
+                    print('Bad ball Hit paddle at', datetime.datetime.now())
+                print(self.score)
 
             self.__predict(ball_a)
             self.__predict(ball_b)
