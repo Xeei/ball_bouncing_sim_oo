@@ -21,13 +21,24 @@ class BouncingSimulator:
         print(self.canvas_width, self.canvas_height)
 
         ball_radius = 0.05 * self.canvas_width
-        for i in range(self.num_balls):
+        bad_ball_radius = 0.025 * self.canvas_width
+        for i in range(self.num_balls//2):
             x = -self.canvas_width + (i+1)*(2*self.canvas_width/(self.num_balls+1))
             y = 0.0
             vx = 10*random.uniform(-1.0, 1.0)
             vy = 10*random.uniform(-1.0, 1.0)
-            ball_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-            self.ball_list.append(ball.Ball(ball_radius, x, y, vx, vy, ball_color, i))
+            ball_color = (61, 232, 58)
+            self.ball_list.append(ball.Good_ball(ball_radius, x, y, vx, vy, ball_color, i))
+
+        for i in range(self.num_balls//3):
+            x = -self.canvas_width + (i+1)*(2*self.canvas_width/(self.num_balls+1))
+            y = 0.0
+            vx = 5*random.uniform(-1.0, 1.0)
+            vy = 5*random.uniform(-1.0, 1.0)
+            ball_color = (235, 64, 52)
+            self.ball_list.append(ball.Bad_ball(bad_ball_radius, x, y, vx, vy, ball_color, i))
+
+        
 
         tom = turtle.Turtle()
         self.my_paddle = paddle.Paddle(200, 50, (255, 0, 0), tom)
@@ -90,6 +101,14 @@ class BouncingSimulator:
         if (self.my_paddle.location[0] + self.my_paddle.width/2 + 40) <= self.canvas_width:
             self.my_paddle.set_location([self.my_paddle.location[0] + 40, self.my_paddle.location[1]])
 
+    # def move_up(self):
+    #     if (self.my_paddle.location[1] + self.my_paddle.height/2 + 40) <= self.canvas_height:
+    #         self.my_paddle.set_location([self.my_paddle.location[0], self.my_paddle.location[1] + 40])
+
+    # def move_down(self):
+    #     if (self.my_paddle.location[1] - self.my_paddle.height/2 - 40) >= -self.canvas_height:
+    #         self.my_paddle.set_location([self.my_paddle.location[0], self.my_paddle.location[1] - 40])
+
     def run(self):
         # initialize pq with collision events and redraw event
         for i in range(len(self.ball_list)):
@@ -100,7 +119,9 @@ class BouncingSimulator:
         self.screen.listen()
         self.screen.onkey(self.move_left, "Left")
         self.screen.onkey(self.move_right, "Right")
-
+        # self.screen.onkey(self.move_up, "Up")
+        # self.screen.onkey(self.move_down, "Down")
+        
         while (True):
             e = heapq.heappop(self.pq)
             if not e.is_valid():
