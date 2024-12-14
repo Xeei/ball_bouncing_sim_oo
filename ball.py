@@ -117,7 +117,7 @@ class Ball:
         else:
             return math.inf
 
-    def time_to_hit_paddle(self, paddle):
+    def time_to_hit_paddle_vertical(self, paddle):
         if (self.vy > 0) and ((self.y + self.size) > (paddle.location[1] - paddle.height/2)):
             return math.inf
         if (self.vy < 0) and ((self.y - self.size) < (paddle.location[1] + paddle.height/2)):
@@ -130,9 +130,27 @@ class Ball:
             return dt
         else:
             return math.inf
+        
+    def time_to_hit_paddle_horizontal(self, paddle):
+        if (self.vx > 0) and ((self.x + self.size) > (paddle.location[0] - paddle.width/2)):
+            return math.inf
+        if (self.vx < 0) and ((self.x - self.size) < (paddle.location[0] + paddle.width/2)):
+            return math.inf
 
-    def bounce_off_paddle(self):
+        dt = (math.sqrt((paddle.location[0] - self.x)**2) - self.size - paddle.width/2) / abs(self.vx)
+        paddle_bottom_edge = paddle.location[1] - paddle.height/2
+        paddle_top_edge = paddle.location[1] + paddle.height/2
+        if paddle_bottom_edge - self.size <= self.y + (self.vy*dt) <= paddle_top_edge + self.size:
+            return dt
+        else:
+            return math.inf
+
+    def bounce_off_paddle_vertical(self):
         self.vy = -self.vy
+        self.count += 1
+
+    def bounce_off_paddle_horizontal(self):
+        self.vx = -self.vx
         self.count += 1
 
     def __str__(self):

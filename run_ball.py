@@ -95,8 +95,10 @@ class BouncingSimulator:
 
         for i in range(len(self.ball_list)):
             a_ball = self.ball_list[i]
-            dtP = a_ball.time_to_hit_paddle(self.my_paddle)
-            heapq.heappush(self.pq, my_event.Event(self.t + dtP, a_ball, None, self.my_paddle))
+            dtPV = a_ball.time_to_hit_paddle_vertical(self.my_paddle)
+            dtPH = a_ball.time_to_hit_paddle_horizontal(self.my_paddle)
+            heapq.heappush(self.pq, my_event.Event(self.t + dtPV, a_ball, None, self.my_paddle))
+            heapq.heappush(self.pq, my_event.Event(self.t + dtPH, None, a_ball, self.my_paddle))
 
     # move_left and move_right handlers update paddle positions
     def move_left(self):
@@ -150,8 +152,11 @@ class BouncingSimulator:
                 ball_b.bounce_off_horizontal_wall()
             elif (ball_a is None) and (ball_b is None) and (paddle_a is None):
                 self.__redraw()
-            elif (ball_a is not None) and (ball_b is None) and (paddle_a is not None):
-                ball_a.bounce_off_paddle()
+            elif (paddle_a is not None):
+                if ball_a is not None and ball_b is None:
+                    ball_a.bounce_off_paddle_vertical()
+                elif ball_a is None and ball_b is not None:
+                    ball_b.bounce_off_paddle_horizontal()
                 if isinstance(ball_a, ball.Good_ball):
                     self.score += ball_a.score
                     self.bg_score.update_score(self.score)
