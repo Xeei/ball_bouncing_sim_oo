@@ -6,6 +6,7 @@ import heapq
 import paddle
 from bg_score import Backgroud_Score
 import datetime
+
 class BouncingSimulator:
     def __init__(self, num_balls):
         self.num_balls = num_balls
@@ -156,12 +157,12 @@ class BouncingSimulator:
                     self.bg_score.update_score(self.score)
                     if self.score == 10:
                         break
-                    print('Good ball Hit paddle at', datetime.datetime.now())
+                    # print('Good ball Hit paddle at', datetime.datetime.now())
                 elif isinstance(ball_a, ball.Bad_ball):
                     if self.score - 1 >= 0:
                         self.score -= 1
                         self.bg_score.update_score(self.score)
-                        print('Bad ball Hit paddle at', datetime.datetime.now())
+                        # print('Bad ball Hit paddle at', datetime.datetime.now())
                 print(self.score)
 
             self.__predict(ball_a)
@@ -169,7 +170,6 @@ class BouncingSimulator:
 
             # regularly update the prediction for the paddle as its position may always be changing due to keyboard events
             self.__paddle_predict()
-
 
         # hold the window; close it by clicking the window close 'x' mark
         turtle.done()
