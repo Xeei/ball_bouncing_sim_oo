@@ -4,6 +4,7 @@ class Backgroud_Score:
     def __init__(self, my_turtle: turtle.Turtle, score: int):
         self.score = score
         self.__my_turtle = my_turtle
+        self.__my_turtle.hideturtle()
         self.location = [0,-50]
         self.__draw()
         
