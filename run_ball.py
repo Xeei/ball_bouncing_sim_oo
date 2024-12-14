@@ -153,17 +153,17 @@ class BouncingSimulator:
             elif (ball_a is not None) and (ball_b is None) and (paddle_a is not None):
                 ball_a.bounce_off_paddle()
                 if isinstance(ball_a, ball.Good_ball):
-                    self.score += 1
+                    self.score += ball_a.score
                     self.bg_score.update_score(self.score)
                     if self.score == 10:
                         break
                     # print('Good ball Hit paddle at', datetime.datetime.now())
                 elif isinstance(ball_a, ball.Bad_ball):
                     if self.score - 1 >= 0:
-                        self.score -= 1
+                        self.score += ball_a.score
                         self.bg_score.update_score(self.score)
                         # print('Bad ball Hit paddle at', datetime.datetime.now())
-                print(self.score)
+                # print(self.score)
 
             self.__predict(ball_a)
             self.__predict(ball_b)
