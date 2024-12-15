@@ -160,9 +160,17 @@ class Ball:
 class Good_ball(Ball):
     def __init__(self, size, x, y, vx, vy, color, id):
         super().__init__(size, x, y, vx, vy, color, id)
-        self.score = 1
+        self.__score = 1
+
+    @property
+    def score(self):
+        return self.__score
 
 class Bad_ball(Ball):
     def __init__(self, size, x, y, vx, vy, color, id):
         super().__init__(size, x, y, vx, vy, color, id) 
-        self.score = -1
+        self.__score = -1
+
+    @property
+    def score(self):
+        return self.__score
