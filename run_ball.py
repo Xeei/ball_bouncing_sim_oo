@@ -128,6 +128,8 @@ class BouncingSimulator:
         self.screen.listen()
         self.screen.onkey(self.move_left, "Left")
         self.screen.onkey(self.move_right, "Right")
+        self.screen.onkeypress(self.my_paddle.active_immune, "space")
+        self.screen.onkeyrelease(self.my_paddle.deactive_immune, "space")
         # self.screen.onkey(self.move_up, "Up")
         # self.screen.onkey(self.move_down, "Down")
         while (True):
@@ -153,29 +155,27 @@ class BouncingSimulator:
             elif (ball_a is None) and (ball_b is None) and (paddle_a is None):
                 self.__redraw()
             elif (paddle_a is not None):
+                if self.score == 10:
+                    break
                 if ball_a is not None and ball_b is None:
                     ball_a.bounce_off_paddle_vertical()
                 elif ball_a is None and ball_b is not None:
                     ball_b.bounce_off_paddle_horizontal()
-                if isinstance(ball_a, ball.Good_ball):
-                    self.score += ball_a.score
-                    self.bg_score.update_score(self.score)
-                    if self.score == 10:
-                        break
-                    # print('Good ball Hit paddle at', datetime.datetime.now())
-                elif isinstance(ball_a, ball.Bad_ball):
-                    if self.score - 1 >= 0:
+                if not self.my_paddle.is_immune:
+                    if isinstance(ball_a, ball.Good_ball):
                         self.score += ball_a.score
                         self.bg_score.update_score(self.score)
-                        # print('Bad ball Hit paddle at', datetime.datetime.now())
-                # print(self.score)
+                    elif isinstance(ball_a, ball.Bad_ball):
+                        if self.score - 1 >= 0:
+                            self.score += ball_a.score
+                            self.bg_score.update_score(self.score)
 
             self.__predict(ball_a)
             self.__predict(ball_b)
 
             # regularly update the prediction for the paddle as its position may always be changing due to keyboard events
             self.__paddle_predict()
-
+        turtle.clear()
         # hold the window; close it by clicking the window close 'x' mark
         turtle.done()
 
